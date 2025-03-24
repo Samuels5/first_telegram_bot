@@ -1,10 +1,11 @@
 from typing import Final
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-import os
+import google.generativeai as genai
 from keep_alive import keep_alive
-keep_alive()
-#TOKEN: Final = os.getenv('BOTAPIKEY')
+keep_alive() 
+# import os
+# TOKEN: Final = os.getenv('BOTAPIKEY')
 TOKEN: Final = "1777544988:AAFN9wr_Sxjtal3Zx11srsIT0zdlwTJW9Dc"
 BOT_USERNAME = "Samis5_bot"
 
@@ -22,19 +23,27 @@ async def custom_command(update: Update, context: ContextTypes):
 
 def handle_response(string: str) -> str:
     text = string.lower()
-    if "hello" in text:
-        return "hey there"
-    if 'how are you' in text:
-        return "i am good"
-    if "i love" in text:
-        return "good choose"
-    return "i didn't get it"
+    # import google.generativeai as genai
+    #pip install google-generativeai
+    GEMINI_API_KEY = "AIzaSyDuBc3WvLnPoFa3EQ1W5ff3yssOW3S0npM"
+    # Function to configure Gemini (Google Generative AI)
+    def configure_gemini(api_key):
+        genai.configure(api_key=api_key)
+
+    # Function to generate response with Gemini
+    def generate_with_gemini(prompt):
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        return response.text
+
+    configure_gemini(GEMINI_API_KEY)
+    return generate_with_gemini(text)
 
 async def handle_message(update: Update, context: ContextTypes):
     message_type: str = update.message.chat.type
     text: str = update.message.text
 
-    print(f'user ({update.message.chat.id}) in {message_type}: {text}') 
+    print(f'user ({update.message.chat.id}) in {message_type}: {text}')
     if message_type == "group":
         if BOT_USERNAME in text:
             new_text: str = text.replace(BOT_USERNAME,"").strip()
