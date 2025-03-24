@@ -2,6 +2,8 @@ from typing import Final
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import os
+from keep_alive import keep_alive
+keep_alive()
 #TOKEN: Final = os.getenv('BOTAPIKEY')
 TOKEN: Final = "1777544988:AAFN9wr_Sxjtal3Zx11srsIT0zdlwTJW9Dc"
 BOT_USERNAME = "Samis5_bot"
